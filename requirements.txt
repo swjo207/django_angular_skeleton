@@ -1,0 +1,7 @@
+Django
+djangorestframework
+drf-nested-routers
+gunicorn
+six
+django_compressor
+#wsgiref==0.1.2
