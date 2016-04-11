@@ -4,4 +4,6 @@ drf-nested-routers
 gunicorn
 six
 django_compressor
-#wsgiref==0.1.2
+django-debug-toolbar
+django-rest-auth
+django-allauth

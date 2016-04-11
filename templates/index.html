@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="philosymbol">
 <head>
-  <title>thinkster-django-angular-boilerplate</title>
+  <title>django-angular-skeleton</title>
 
   <base href="/" />
 
@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  {% csrf_token %}
   {% include 'navbar.html' %}
 
   <div class="container-fluid">

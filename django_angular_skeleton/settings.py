@@ -37,11 +37,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'rest_framework', 
-	'compressor',
+    'django.contrib.sites',
+#    'debug_toolbar',                   # for debugging purpose
+	'rest_framework',                  # REST API implementation
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+    # http://www.intenct.nl/projects/django-allauth/
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    #'allauth.socialaccount.providers.twitter',
+    #
+	'compressor',                      # uglify javascript files
+    'posts',                           # write to post (bulletin-board)
 ]
 
 MIDDLEWARE_CLASSES = [
+    # for debugging purpose
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,14 +150,56 @@ STATICFILES_FINDERS = (
 
 COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-    )
-}
-
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
+
+#AUTH_USER_MODEL = 'authentication.Account'
+AUTHENTICATION_BACKENDS = (
+    # login by username in admin
+    'django.contrib.auth.backends.ModelBackend',
+    # allauth specific authentication methods, by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+REST_SESSION_LOGIN = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+#ACCOUNT_EMAIL_VERIFICATION = 'optional'
+#ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s %(module)s] %(levelname)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
